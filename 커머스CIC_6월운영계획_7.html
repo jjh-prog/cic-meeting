@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>커머스 CIC 6월 브랜드별 운영 계획</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif; background: #f7f6f3; color: #1a1a1a; padding: 2rem 1rem; }
+  .page { max-width: 900px; margin: 0 auto; background: white; border-radius: 12px; padding: 2.5rem 2.5rem 3rem; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+
+  .notion-header { padding-bottom: 1.25rem; border-bottom: 1px solid #ebebea; margin-bottom: 1.75rem; }
+  .notion-title { font-size: 27px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.3px; }
+  .notion-meta { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; margin-top: 0.85rem; }
+  .meta-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #787774; }
+  .meta-val { font-weight: 600; color: #37352f; background: #f1f0ef; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+
+  .section { margin-bottom: 2.25rem; }
+  .sec-hd { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: #1a1a1a; padding-bottom: 0.6rem; border-bottom: 1px solid #ebebea; margin-bottom: 1.1rem; }
+
+  /* KPI */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+  .kpi { background: #f7f6f3; border-radius: 8px; padding: 0.9rem 1rem; }
+  .kpi-label { font-size: 12px; color: #787774; margin-bottom: 5px; }
+  .kpi-value { font-size: 21px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.4px; }
+  .kpi-delta { font-size: 12px; margin-top: 4px; }
+  .up { color: #0f766e; } .dn { color: #b91c1c; } .nt { color: #787774; }
+
+  /* Brand card */
+  .brand-card { border: 1px solid #ebebea; border-radius: 10px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .brand-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #ebebea; }
+  .brand-avatar { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .brand-name { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+  .brand-sub { font-size: 12px; color: #787774; margin-top: 1px; }
+  .brand-kpi { display: flex; gap: 12px; margin-left: auto; flex-shrink: 0; }
+  .bkpi { text-align: right; }
+  .bkpi-label { font-size: 11px; color: #787774; }
+  .bkpi-value { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+
+  /* Initiative rows */
+  .init-list { display: flex; flex-direction: column; gap: 8px; }
+  .init-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; background: #fafaf9; border-radius: 6px; border-left: 3px solid #e0deda; }
+  .init-row.highlight { border-left-color: #3b82f6; background: #f0f7ff; }
+  .init-row.shared { border-left-color: #7c3aed; background: #f5f3ff; }
+  .init-row.caution { border-left-color: #f59e0b; background: #fffbeb; }
+  .init-row.new { border-left-color: #0f766e; background: #f0fdf9; }
+  .init-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .init-content { flex: 1; }
+  .init-title { font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+  .init-desc { font-size: 12px; color: #787774; line-height: 1.6; }
+  .init-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-right: 4px; white-space: nowrap; }
+  .init-amount { font-size: 13px; font-weight: 700; color: #0f766e; margin-left: auto; white-space: nowrap; flex-shrink: 0; padding-left: 8px; }
+
+  /* Schedule table */
+  .tbl-wrap { border: 1px solid #ebebea; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  th { background: #f7f6f3; padding: 8px 11px; font-weight: 600; color: #787774; text-align: left; font-size: 11px; border-bottom: 1px solid #ebebea; }
+  td { padding: 8px 11px; color: #1a1a1a; border-bottom: 1px solid #ebebea; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafaf9; }
+  .num-r { text-align: right; }
+  .sum-row td { background: #f7f6f3; font-weight: 700; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-weight: 600; }
+  .b-green  { background: #dcfce7; color: #15803d; }
+  .b-blue   { background: #dbeafe; color: #1d4ed8; }
+  .b-purple { background: #ede9fe; color: #5b21b6; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-gray   { background: #f1f0ef; color: #5f5e5a; }
+  .b-teal   { background: #ccfbf1; color: #0f766e; }
+  .b-red    { background: #fee2e2; color: #b91c1c; }
+
+  /* Callout */
+  .callout { border-radius: 6px; padding: 0.75rem 1rem; font-size: 13px; line-height: 1.65; margin-bottom: 0.75rem; display: flex; gap: 8px; align-items: flex-start; }
+  .c-info   { background: #dbeafe; color: #1d4ed8; border-left: 3px solid #3b82f6; }
+  .c-warn   { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
+  .c-success{ background: #dcfce7; color: #15803d; border-left: 3px solid #22c55e; }
+  .c-gray   { background: #f7f6f3; color: #5f5e5a; border-left: 3px solid #b0aea9; }
+
+  /* Timeline bar */
+  .timeline { margin: 0.5rem 0 1rem; }
+  .tl-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 12px; }
+  .tl-label { width: 120px; color: #787774; flex-shrink: 0; font-size: 12px; }
+  .tl-bar-bg { flex: 1; height: 20px; background: #f1f0ef; border-radius: 4px; overflow: hidden; position: relative; }
+  .tl-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 600; color: white; }
+  .tl-amount { width: 60px; text-align: right; font-weight: 700; color: #1a1a1a; flex-shrink: 0; }
+
+  .brand-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+  .sub-label { font-size: 13px; font-weight: 700; color: #787774; margin: 1rem 0 0.6rem; display: flex; align-items: center; gap: 6px; }
+  .divider { height: 1px; background: #ebebea; margin: 1.75rem 0; }
+  .note { font-size: 11px; color: #b0aea9; margin-top: 6px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* Action item */
+  .action-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid #ebebea; font-size: 13px; }
+  .action-row:last-child { border-bottom: none; }
+  .action-num { width: 22px; height: 22px; border: 1px solid #e0deda; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #787774; flex-shrink: 0; margin-top: 1px; }
+  .action-title { flex: 1; font-weight: 600; color: #1a1a1a; }
+  .action-meta { font-size: 12px; color: #787774; margin-top: 2px; }
+
+  @media (max-width: 620px) {
+    .page { padding: 1.5rem 1rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .brand-kpi { display: none; }
+    .notion-title { font-size: 22px; }
+  }
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 헤더 -->
+  <div class="notion-header">
+    <div class="notion-title">📋 커머스 CIC 6월 브랜드별 운영 계획</div>
+    <div class="notion-meta">
+      <span class="meta-item">🗓️ <span class="meta-val">2025년 6월 (운영 기간)</span></span>
+      <span class="meta-item">📊 <span class="meta-val">작성 기준: 5월 실적 + 6월 확정 계획</span></span>
+      <span class="meta-item">🏢 <span class="meta-val">커머스 CIC 전략기획팀</span></span>
+    </div>
+  </div>
+
+  <!-- 6월 전사 목표 요약 -->
+  <div class="section">
+    <div class="sec-hd">📄 6월 전사 목표 요약</div>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">💰 전사 매출 목표</div>
+        <div class="kpi-value">29.3억</div>
+        <div class="kpi-delta nt">5월(22.7억) 대비 +29%</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">📈 전사 이익 목표</div>
+        <div class="kpi-value">6.5억</div>
+        <div class="kpi-delta nt">공헌이익 기준</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">💡 영업흑자 전환 조건</div>
+        <div class="kpi-value">공헌익 &gt;6.4억</div>
+        <div class="kpi-delta nt">고정비 커버 기준</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">🌏 신규 채널 기대 매출</div>
+        <div class="kpi-value">+4.2억↑</div>
+        <div class="kpi-delta up">수출·공동구매·폐쇄몰 합산</div>
+      </div>
+    </div>
+    <div class="callout c-success">✅ 6월은 정시즌 돌입 + 다채널 확대로 5월 대비 실질적인 매출 반등이 예상되는 달. 퓨어썸 중심의 신규 채널(수출·공동구매·폐쇄몰)이 전사 목표 달성의 핵심 레버.</div>
+    <div class="callout c-warn">⚠️ 월 고정비(공통비+인건비+물류임차) 약 6.4억 커버를 위해 공헌이익 확보가 최우선. 모도리·바디럽의 본채널 회복이 병행되어야 영업흑자 전환 가능.</div>
+  </div>
+
+  <!-- 메인 브랜드 -->
+  <div class="section">
+    <div class="sec-hd">📄 메인 브랜드 운영 계획</div>
+
+    <!-- 퓨어썸 -->
+    <div class="brand-card">
+      <div class="brand-card-header">
+        <div class="brand-avatar" style="background:#dbeafe;color:#1d4ed8;">퓨</div>
+        <div>
+          <div class="brand-name"><span class="brand-dot" style="background:#3b82f6"></span>퓨어썸</div>
+          <div class="brand-sub">메인 브랜드 · 5월 실 매출 15.7억 (달성률 98.3%)</div>
+        </div>
+        <div class="brand-kpi">
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 매출</div>
+            <div class="bkpi-value">20.4억</div>
+          </div>
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 이익</div>
+            <div class="bkpi-value">4.5억</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">채널별 목표 vs 5월 실적</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">채널</th>
+              <th style="width:25%" class="num-r">5월 전환 매출</th>
+              <th style="width:25%" class="num-r">6월 목표</th>
+              <th style="width:15%" class="num-r">증감</th>
+              <th style="width:15%">방향</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">3.06억</td><td class="num-r">3.33억</td><td class="num-r" style="color:#0f766e">+9%</td><td><span class="badge b-green">유지·확대</span></td></tr>
+            <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">5.50억</td><td class="num-r">5.61억</td><td class="num-r" style="color:#0f766e">+2%</td><td><span class="badge b-gray">유지</span></td></tr>
+            <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">2.65억</td><td class="num-r">5.83억</td><td class="num-r" style="color:#0f766e">+120%</td><td><span class="badge b-green">DOC 발주↑</span></td></tr>
+            <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">1.86억</td><td class="num-r">1.65억</td><td class="num-r" style="color:#b91c1c">-11%</td><td><span class="badge b-amber">조정</span></td></tr>
+            <tr><td style="font-weight:600">B2B(수출)</td><td class="num-r" style="color:#787774">2.59억</td><td class="num-r">3.96억</td><td class="num-r" style="color:#0f766e">+53%</td><td><span class="badge b-green">수출 확대</span></td></tr>
+            <tr class="sum-row"><td>합계</td><td class="num-r">15.66억</td><td class="num-r">20.38억</td><td class="num-r" style="color:#0f766e">+30%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">6월 매출 구성 예상</div>
+      <div class="timeline">
+        <div class="tl-row">
+          <span class="tl-label">쿠팡 DOC 대량발주</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:75%;background:#3b82f6">DOC 관점 대량 발주</div></div>
+          <span class="tl-amount">6.0억</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-label">징동닷컴 수출</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:16%;background:#0f766e">징동닷컴</div></div>
+          <span class="tl-amount">1.27억</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-label">중국 B2B 발주</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:9%;background:#7c3aed">B2B</div></div>
+          <span class="tl-amount">0.72억</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-label">인스타 공동구매</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:13%;background:#f59e0b">공동구매</div></div>
+          <span class="tl-amount">0.1억~</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-label">폐쇄몰 (3개사)</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:3%;background:#5DCAA5"></div></div>
+          <span class="tl-amount">0.2억</span>
+        </div>
+        <div class="tl-row">
+          <span class="tl-label">국군복지단(WA몰)</span>
+          <div class="tl-bar-bg"><div class="tl-bar" style="width:3%;background:#888780"></div></div>
+          <span class="tl-amount">0.2억</span>
+        </div>
+      </div>
+
+      <div class="init-list">
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">🛒 쿠팡 DOC 대량 발주 대응 — 전월 매입 차액 연계</div>
+            <div class="init-desc">5월 쿠팡 매입 차액 △1.8억 발생으로 달성 매출(17.5억) 대비 실 매출(15.7억)로 축소된 상황. 6월은 DOC 관점에서 해당 차액이 정산·회복되며 대량 발주(6억 수준)로 전환될 것으로 예상. 전월 차액 구조가 당월 발주 증가로 연결되는 패턴인 만큼 재고 확보 및 납기 일정 사전 조율 필수.</div>
+          </div>
+          <span class="init-amount">6.0억</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">🌏 수출 채널 확대 — 징동닷컴 + 중국 B2B</div>
+            <div class="init-desc">징동닷컴 1.27억 + 중국 B2B 업체 0.72억 발주 예정. 총 1.99억 규모 수출 채널 신규 확보. 통관·물류 일정 사전 확인 필수. 향후 정기 발주 전환 가능 여부 검토 필요.</div>
+          </div>
+          <span class="init-amount">1.99억</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">📸 인스타그램 공동구매 — 칫솔살균기 (6/22~8/8)</div>
+            <div class="init-desc">6월 22일부터 인스타그램 공동구매 칫솔살균기 품목 진행. 8월 8일까지 11개 일정 확정. 건당 0.1억 기대 수익. 인플루언서 관리 및 재고 분배 계획 수립 필요.</div>
+          </div>
+          <span class="init-amount">0.1억×11건</span>
+        </div>
+        <div class="init-row shared">
+          <div class="init-content">
+            <div class="init-title">🏢 폐쇄몰 재운영 — 현대카드·삼성카드·삼성블루베리</div>
+            <div class="init-desc">3개 폐쇄몰 재운영을 통한 브랜드별 월 0.2억 매출 기대. 퓨어썸·모도리 공통 진행. 상품 기획 및 카드사 협의 일정 확인 필요.</div>
+          </div>
+          <span class="init-amount">0.2억/월</span>
+        </div>
+        <div class="init-row shared">
+          <div class="init-content">
+            <div class="init-title">🎖️ 국군복지단 WA몰 입점 — 브랜드별 0.2억 기대</div>
+            <div class="init-desc">WA몰 입점 완료. 6월부터 정식 판매 개시. 퓨어썸·모도리 공통 진행. 초도 물량 배정 및 노출 우선순위 협의 필요.</div>
+          </div>
+          <span class="init-amount">0.2억/월</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">☀️ 정시즌 진입 — 수전·욕실용품 전환 효율 개선 기대</div>
+            <div class="init-desc">6월부터 수전 관련 욕실용품 정시즌 돌입. 여름철 욕실 리모델링·교체 수요 증가에 따른 광고 전환율 및 자연 유입 확대 예상. 시즌 키워드 중심 광고 소재 선제 교체 및 최적화 필요. 5월 광고비율 14.6% 수준 유지하면서 효율 극대화 목표.</div>
+          </div>
+          <span class="init-amount">전환율↑</span>
+        </div>
+        <div class="init-row caution">
+          <div class="init-content">
+            <div class="init-title">⚠️ 쿠팡 매입 차액 모니터링 — 6월 발주 전환 여부 확인</div>
+            <div class="init-desc">5월 쿠팡 매입 차액 △1.8억은 전월 축소 → 당월 DOC 대량 발주 증가로 연결되는 구조. 6월 발주가 예상대로 이행되는지 실시간 확인 필요. 구조적 매입 차액이 반복될 경우 단가 협의 및 반품 조건 재검토 병행.</div>
+          </div>
+          <span class="init-amount" style="color:#b91c1c">모니터링</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 바디럽 -->
+    <div class="brand-card">
+      <div class="brand-card-header">
+        <div class="brand-avatar" style="background:#fee2e2;color:#b91c1c;">바</div>
+        <div>
+          <div class="brand-name"><span class="brand-dot" style="background:#f87171"></span>바디럽</div>
+          <div class="brand-sub">메인 브랜드 · 5월 전환 매출 1.09억 → 6월 목표 1.76억 (+61%)</div>
+        </div>
+        <div class="brand-kpi">
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 매출</div>
+            <div class="bkpi-value">1.76억</div>
+          </div>
+          <div class="bkpi">
+            <div class="bkpi-label">5월 전환 매출</div>
+            <div class="bkpi-value">1.09억</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout c-warn" style="margin-bottom:10px">⚠️ 5월 전환 매출 1.09억으로 목표(1.70억) 대비 크게 미달. 6월 목표는 1.76억으로 전월 대비 +61% 달성이 필요한 상황. 채널별로는 자사몰·네이버·B2B 채널 전반에서 5월 대비 약 2배 수준 성장이 목표로 설정되어 있어 집중 실행 필요.</div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">채널별 목표 vs 5월 실적</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">채널</th>
+              <th style="width:25%" class="num-r">5월 전환 매출</th>
+              <th style="width:25%" class="num-r">6월 목표</th>
+              <th style="width:15%" class="num-r">증감</th>
+              <th style="width:15%">방향</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.32억</td><td class="num-r">0.48억</td><td class="num-r" style="color:#0f766e">+52%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">0.29억</td><td class="num-r">0.48억</td><td class="num-r" style="color:#0f766e">+66%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.06억</td><td class="num-r">0.06억</td><td class="num-r" style="color:#787774">0%</td><td><span class="badge b-gray">유지</span></td></tr>
+            <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.05억</td><td class="num-r">0.12억</td><td class="num-r" style="color:#0f766e">+140%</td><td><span class="badge b-green">강화</span></td></tr>
+            <tr><td style="font-weight:600">B2B(수출)</td><td class="num-r" style="color:#787774">0.36억</td><td class="num-r">0.62억</td><td class="num-r" style="color:#0f766e">+72%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr class="sum-row"><td>합계</td><td class="num-r">1.09억</td><td class="num-r">1.76억</td><td class="num-r" style="color:#0f766e">+61%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="init-list">
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">🌐 자사몰·네이버 동시 강화 — 각 0.48억 목표</div>
+            <div class="init-desc">자사몰(0.32억→0.48억, +52%)·네이버(0.29억→0.48억, +66%) 모두 동일 목표 수치. 여름 시즌 기획전 참여 및 시즌 광고 소재 교체로 전환율 회복 집중. 자사몰 재구매 고객 대상 CRM 캠페인 병행 권고.</div>
+          </div>
+          <span class="init-amount">각 0.48억</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">📦 B2B(수출) 채널 확대 — 0.36억→0.62억 (+72%)</div>
+            <div class="init-desc">5월 B2B 전환 매출 0.36억에서 6월 0.62억으로 가장 큰 절대액 성장 필요 채널. 기존 B2B 거래처 재발주 유도 및 신규 거래처 발굴 병행. 납기·재고 확보 일정 사전 조율 필수.</div>
+          </div>
+          <span class="init-amount">0.62억</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">📢 B2C 채널 집중 — 0.05억→0.12억 (+140%)</div>
+            <div class="init-desc">B2C 채널이 목표 대비 성장률 가장 높은 채널(+140%). 라이브커머스·공동구매 등 B2C 직접 판매 채널 활성화 필요. 인플루언서 협업 및 SNS 커머스 활용 방안 수립 권고.</div>
+          </div>
+          <span class="init-amount">0.12억</span>
+        </div>
+        <div class="init-row shared">
+          <div class="init-content">
+            <div class="init-title">🏢 폐쇄몰·WA몰 신규 채널 매출 확보</div>
+            <div class="init-desc">현대카드·삼성카드·삼성블루베리 폐쇄몰 및 국군복지단 WA몰을 통한 채널 다각화 및 추가 매출 확보. 본채널 부진 보완 역할 기대.</div>
+          </div>
+          <span class="init-amount">+0.2억~</span>
+        </div>
+        <div class="init-row caution">
+          <div class="init-content">
+            <div class="init-title">🛒 쿠팡 채널 현 수준 유지 — 효율 중심 운영</div>
+            <div class="init-desc">쿠팡 5월 전환 매출 0.06억으로 소규모, 6월 목표도 동일 수준. 무리한 확대보다 현 수준 유지하면서 광고 효율 최적화 집중. 로켓배송 재고 관리 및 품절 방지 우선.</div>
+          </div>
+          <span class="init-amount">0.06억</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">📉 광고 효율 최적화 — 공헌이익률 19%→25% 목표</div>
+            <div class="init-desc">5월 광고비율 11%, 공헌이익률 19%. ROI 낮은 매체 축소 및 전환율 높은 채널 집중 운영. 자사몰·네이버 성장과 함께 광고 효율 개선으로 공헌이익률 25% 이상 회복 목표.</div>
+          </div>
+          <span class="init-amount">이익률↑</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모도리 -->
+    <div class="brand-card">
+      <div class="brand-card-header">
+        <div class="brand-avatar" style="background:#fef3c7;color:#92400e;">모</div>
+        <div>
+          <div class="brand-name"><span class="brand-dot" style="background:#f59e0b"></span>모도리</div>
+          <div class="brand-sub">메인 브랜드 · 5월 전환 매출 3.34억 → 6월 목표 4.58억 (+37%)</div>
+        </div>
+        <div class="brand-kpi">
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 매출</div>
+            <div class="bkpi-value">4.58억</div>
+          </div>
+          <div class="bkpi">
+            <div class="bkpi-label">5월 전환 매출</div>
+            <div class="bkpi-value">3.34억</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout c-warn" style="margin-bottom:10px">⚠️ 4월(73%)·5월(67%) 2개월 연속 목표 미달. 5월 쿠팡 매입 차액 △0.33억 발생으로 실 매출 추가 축소. 6월은 쿠팡 발주 회복 + 로프트아일랜드 협업 + B2B 채널 확대로 전월 대비 +37% 달성이 필요한 상황.</div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">채널별 목표 vs 5월 실적</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">채널</th>
+              <th style="width:25%" class="num-r">5월 전환 매출</th>
+              <th style="width:25%" class="num-r">6월 목표</th>
+              <th style="width:15%" class="num-r">증감</th>
+              <th style="width:15%">방향</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.49억</td><td class="num-r">0.70억</td><td class="num-r" style="color:#0f766e">+44%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">1.07억</td><td class="num-r">1.30억</td><td class="num-r" style="color:#0f766e">+21%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.76억</td><td class="num-r">1.32억</td><td class="num-r" style="color:#0f766e">+73%</td><td><span class="badge b-green">강화</span></td></tr>
+            <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.96억</td><td class="num-r">0.85억</td><td class="num-r" style="color:#b91c1c">-12%</td><td><span class="badge b-amber">조정</span></td></tr>
+            <tr><td style="font-weight:600">B2B(수출)</td><td class="num-r" style="color:#787774">0.07억</td><td class="num-r">0.42억</td><td class="num-r" style="color:#0f766e">+500%</td><td><span class="badge b-green">신규</span></td></tr>
+            <tr class="sum-row"><td>합계</td><td class="num-r">3.34억</td><td class="num-r">4.58억</td><td class="num-r" style="color:#0f766e">+37%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="init-list">
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">🛒 쿠팡 발주 회복 — 전월 축소→당월 증가 패턴 (0.76억→1.32억)</div>
+            <div class="init-desc">퓨어썸과 동일 구조로, 5월 쿠팡 매입 차액 마이너스(△0.33억) 발생 이후 6월 DOC 관점 발주 증가 예상. 목표 1.32억으로 전월 대비 +73% 달성 필요. 재고 확보 및 납기 일정 사전 조율 필수.</div>
+          </div>
+          <span class="init-amount">1.32억</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">🤝 로프트아일랜드 협업 공동구매 (6/10~6/16)</div>
+            <div class="init-desc">로프트아일랜드와 협업하여 자사 랜딩 공동구매 진행. 65개 채널 동시 운영. 자사몰(목표 0.70억) 달성에 직접 기여 예상. 재고 확보 및 고객 응대 체계 사전 준비 필수. 전환율·ROAS 실시간 모니터링 권고.</div>
+          </div>
+          <span class="init-amount">자사몰↑</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">🌏 B2B 채널 신규 확대 — 0.07억→0.42억 (+500%)</div>
+            <div class="init-desc">5월 B2B 매출 0.07억에서 6월 0.42억으로 가장 높은 성장률 목표 채널. 기존 거래처 재발주 유도 및 신규 B2B 거래처 발굴 필요. 퓨어썸·바디럽 B2B 확대 기조와 연계하여 수출 가능성 타진 권고.</div>
+          </div>
+          <span class="init-amount">0.42억</span>
+        </div>
+        <div class="init-row shared">
+          <div class="init-content">
+            <div class="init-title">🏢 폐쇄몰 재운영 + WA몰 입점 (퓨어썸 공통)</div>
+            <div class="init-desc">현대카드·삼성카드·삼성블루베리 폐쇄몰 재운영 및 WA몰 입점을 통한 0.2억+0.2억 추가 매출. 자사몰·네이버 목표 달성 보완 역할.</div>
+          </div>
+          <span class="init-amount">0.4억</span>
+        </div>
+        <div class="init-row caution">
+          <div class="init-content">
+            <div class="init-title">📊 B2C 채널 조정 — 0.96억→0.85억 (-12%)</div>
+            <div class="init-desc">B2C는 전 채널 중 유일하게 목표가 5월 대비 하향 조정(-12%). 5월 B2C 매출이 0.96억으로 높았으나 수익성 점검 필요. 비효율 B2C 채널 정리 및 고마진 채널 집중 운영으로 이익률 방어.</div>
+          </div>
+          <span class="init-amount" style="color:#92400e">효율화</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">🎯 하반기 목표 재설정 검토</div>
+            <div class="init-desc">4~5월 연속 미달로 하반기 목표(6~12월 평균 4.8억/월) 달성 가능성 재검토 필요. 6월 반등 여부에 따라 7월 경영회의에서 목표 현실화 여부 결정 권고.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 닥터원더 -->
+    <div class="brand-card">
+      <div class="brand-card-header">
+        <div class="brand-avatar" style="background:#ede9fe;color:#5b21b6;">닥</div>
+        <div>
+          <div class="brand-name"><span class="brand-dot" style="background:#7c3aed"></span>닥터원더</div>
+          <div class="brand-sub">메인 브랜드 · 5월 전환 매출 2.07억 → 6월 목표 1.78억 (B2B 조정)</div>
+        </div>
+        <div class="brand-kpi">
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 매출</div>
+            <div class="bkpi-value">1.8억</div>
+          </div>
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 이익</div>
+            <div class="bkpi-value">0.7억</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout c-success" style="margin-bottom:10px">✅ 5월 메인 브랜드 중 유일 목표 초과 달성 (134.5%). 공헌이익률 32%로 최고 수준. 올리브영 올영세일 이후 재발주 물량 기대. 6월은 B2B(수출) 조정(1.554억→1.155억)으로 전체 목표가 5월 대비 소폭 하향 설정.</div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">채널별 목표 vs 5월 실적</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">채널</th>
+              <th style="width:25%" class="num-r">5월 전환 매출</th>
+              <th style="width:25%" class="num-r">6월 목표</th>
+              <th style="width:15%" class="num-r">증감</th>
+              <th style="width:15%">방향</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.017억</td><td class="num-r">0.011억</td><td class="num-r" style="color:#b91c1c">-35%</td><td><span class="badge b-amber">조정</span></td></tr>
+            <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">0.007억</td><td class="num-r">0.011억</td><td class="num-r" style="color:#0f766e">+57%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.462억</td><td class="num-r">0.495억</td><td class="num-r" style="color:#0f766e">+7%</td><td><span class="badge b-green">유지·확대</span></td></tr>
+            <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.031억</td><td class="num-r">0.110억</td><td class="num-r" style="color:#0f766e">+255%</td><td><span class="badge b-green">강화</span></td></tr>
+            <tr><td style="font-weight:600">B2B(수출)</td><td class="num-r" style="color:#787774">1.554억</td><td class="num-r">1.155억</td><td class="num-r" style="color:#b91c1c">-26%</td><td><span class="badge b-amber">조정</span></td></tr>
+            <tr class="sum-row"><td>합계</td><td class="num-r">2.071억</td><td class="num-r">1.782억</td><td class="num-r" style="color:#b91c1c">-13%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="init-list">
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">🏪 올리브영 재발주 + 쿠팡 유지 — 핵심 채널 방어 (0.462억→0.495억)</div>
+            <div class="init-desc">쿠팡이 단일 채널 중 최대 비중(5월 0.462억→6월 0.495억, +7%). 올영세일 이후 홍천측 보유재고 DOC 감소에 따른 재발주 물량 기대. 납기·재고 확보 일정 사전 조율 및 품절 방지 필수.</div>
+          </div>
+          <span class="init-amount">0.495억</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">📢 B2C 채널 집중 강화 — 0.031억→0.110억 (+255%)</div>
+            <div class="init-desc">B2C 채널이 6월 최대 성장률 목표(+255%). 라이브커머스·SNS 커머스·공동구매 등 B2C 직접 판매 채널 활성화 필요. 올영세일 이후 소비자 인지도 활용한 B2C 전환 집중 권고.</div>
+          </div>
+          <span class="init-amount">0.110억</span>
+        </div>
+        <div class="init-row caution">
+          <div class="init-content">
+            <div class="init-title">⚠️ B2B(수출) 조정 — 1.554억→1.155억 (-26%) 관리</div>
+            <div class="init-desc">5월 B2B 매출 1.554억에서 6월 1.155억으로 하향 조정. B2B 수출 채널 발주 사이클 변동으로 인한 자연 감소로 판단. 기존 거래처 관계 유지 및 신규 거래처 파이프라인 확보 병행 필요.</div>
+          </div>
+          <span class="init-amount" style="color:#92400e">관리</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">📊 5월 초과 달성 성공 요인 분석 및 전사 공유</div>
+            <div class="init-desc">134.5% 달성 핵심 요인(채널별 기여도, 광고 효율, 상품별 판매 현황) 정리 후 타 브랜드 적용 가능 여부 검토. 7월 경영회의 전 보고서 제출 권고.</div>
+          </div>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">📈 원가율 관리 — 47% 개선 목표</div>
+            <div class="init-desc">5월 원가율 47%로 메인 브랜드 중 최고 수준. 공헌이익률 32% 유지를 위해 원가 구조 최적화 검토. 제조 단가 협의 또는 고마진 SKU 비중 확대 방향 수립 필요.</div>
+          </div>
+          <span class="init-amount">이익률 방어</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 서브 브랜드 -->
+  <div class="section">
+    <div class="sec-hd">📄 서브 브랜드 운영 계획</div>
+
+    <div class="two-col">
+      <!-- 블랙몬스터 -->
+      <div class="brand-card" style="margin-bottom:0">
+        <div class="brand-card-header" style="margin-bottom:0.75rem">
+          <div class="brand-avatar" style="background:#ccfbf1;color:#0f766e;font-size:12px;">블</div>
+          <div>
+            <div class="brand-name" style="font-size:14px"><span class="brand-dot" style="background:#5DCAA5"></span>블랙몬스터</div>
+            <div class="brand-sub">5월 전환 매출 0.345억 → 6월 목표 0.391억</div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:#787774;margin-bottom:6px">채널별 목표 vs 5월 실적</div>
+        <div class="tbl-wrap" style="margin-bottom:0.75rem">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%">채널</th>
+                <th class="num-r" style="width:26%">5월 전환</th>
+                <th class="num-r" style="width:26%">6월 목표</th>
+                <th class="num-r" style="width:26%">증감</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.071억</td><td class="num-r">0.077억</td><td class="num-r" style="color:#0f766e">+8%</td></tr>
+              <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">0.026억</td><td class="num-r">0.028억</td><td class="num-r" style="color:#0f766e">+8%</td></tr>
+              <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.121억</td><td class="num-r">0.143억</td><td class="num-r" style="color:#0f766e">+18%</td></tr>
+              <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.127억</td><td class="num-r">0.143억</td><td class="num-r" style="color:#0f766e">+13%</td></tr>
+              <tr><td style="font-weight:600">B2B</td><td class="num-r" style="color:#787774">0.000억</td><td class="num-r">0.000억</td><td class="num-r" style="color:#787774">—</td></tr>
+              <tr class="sum-row"><td>합계</td><td class="num-r">0.345억</td><td class="num-r">0.391억</td><td class="num-r" style="color:#0f766e">+13%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="init-list">
+          <div class="init-row highlight">
+            <div class="init-content">
+              <div class="init-title" style="font-size:12px">📊 6월 목표 현실화 — 전환 매출 기준 재설정</div>
+              <div class="init-desc">연초 목표(0.55억)가 실제 전환 매출 대비 과도하게 설정됨. 5월 전환 실적(0.345억) 기준으로 6~12월 목표 현실화 조정. 쿠팡·B2C 중심 채널 안정화 목표.</div>
+            </div>
+          </div>
+          <div class="init-row new">
+            <div class="init-content">
+              <div class="init-title" style="font-size:12px">💰 수익성 중심 운영 — COGS 25% · 채널이익 26~27%</div>
+              <div class="init-desc">광고는 쿠팡 SA만 활용하여 광고비율 10% 미만 유지. COGS 기준 25% 선 관리. 채널 이익률 26~27% 목표로 수익성 중심 안정 운영.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 언코티드 -->
+      <div class="brand-card" style="margin-bottom:0">
+        <div class="brand-card-header" style="margin-bottom:0.75rem">
+          <div class="brand-avatar" style="background:#f1f0ef;color:#5f5e5a;font-size:12px;">언</div>
+          <div>
+            <div class="brand-name" style="font-size:14px"><span class="brand-dot" style="background:#b4b2a9"></span>언코티드</div>
+            <div class="brand-sub">5월 전환 매출 0.373억 → 6월 목표 0.253억</div>
+          </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:#787774;margin-bottom:6px">채널별 목표 vs 5월 실적</div>
+        <div class="tbl-wrap" style="margin-bottom:0.75rem">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%">채널</th>
+                <th class="num-r" style="width:26%">5월 전환</th>
+                <th class="num-r" style="width:26%">6월 목표</th>
+                <th class="num-r" style="width:26%">증감</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.270억</td><td class="num-r">0.165억</td><td class="num-r" style="color:#b91c1c">-39%</td></tr>
+              <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">0.052억</td><td class="num-r">0.044억</td><td class="num-r" style="color:#b91c1c">-15%</td></tr>
+              <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.004억</td><td class="num-r">0.000억</td><td class="num-r" style="color:#787774">—</td></tr>
+              <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.047억</td><td class="num-r">0.044억</td><td class="num-r" style="color:#b91c1c">-6%</td></tr>
+              <tr><td style="font-weight:600">B2B</td><td class="num-r" style="color:#787774">0.000억</td><td class="num-r">0.000억</td><td class="num-r" style="color:#787774">—</td></tr>
+              <tr class="sum-row"><td>합계</td><td class="num-r">0.373억</td><td class="num-r">0.253억</td><td class="num-r" style="color:#b91c1c">-32%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="init-list">
+          <div class="init-row new">
+            <div class="init-content">
+              <div class="init-title" style="font-size:12px">✅ 현 수준 매출·이익 유지 — 오가닉 전환 중심</div>
+              <div class="init-desc">자사몰·네이버·B2C 오가닉 전환 중심 운영 유지. 광고 미집행 구조로 비용 최소화. 현재 수준의 매출·이익 안정적 유지가 목표.</div>
+            </div>
+          </div>
+          <div class="init-row caution">
+            <div class="init-content">
+              <div class="init-title" style="font-size:12px">⚠️ 5월 원가율 급등 — 캠핑웨건 재고 소진 영향</div>
+              <div class="init-desc">5월 캠핑웨건 대량 재고 소진으로 원가율 일시 급등(64%↑). 해당 재고 소진 완료로 6월부터 원가율 정상화 예상. 잔여 재고 현황 점검 및 추가 소진 계획 수립 권고.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 공백 -->
+    <div class="brand-card" style="margin-top:1.25rem">
+      <div class="brand-card-header">
+        <div class="brand-avatar" style="background:#f1f0ef;color:#5f5e5a;">공</div>
+        <div>
+          <div class="brand-name"><span class="brand-dot" style="background:#888780"></span>공백</div>
+          <div class="brand-sub">서브 브랜드 · 5월 전환 매출 0.247억 → 6월 목표 0.223억</div>
+        </div>
+        <div class="brand-kpi">
+          <div class="bkpi">
+            <div class="bkpi-label">6월 목표 매출</div>
+            <div class="bkpi-value">0.22억</div>
+          </div>
+          <div class="bkpi">
+            <div class="bkpi-label">5월 전환 매출</div>
+            <div class="bkpi-value">0.25억</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:#787774;margin-bottom:8px">채널별 목표 vs 5월 실적</div>
+      <div class="tbl-wrap" style="margin-bottom:1rem">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:20%">채널</th>
+              <th style="width:25%" class="num-r">5월 전환 매출</th>
+              <th style="width:25%" class="num-r">6월 목표</th>
+              <th style="width:15%" class="num-r">증감</th>
+              <th style="width:15%">방향</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600">자사몰</td><td class="num-r" style="color:#787774">0.010억</td><td class="num-r">0.014억</td><td class="num-r" style="color:#0f766e">+40%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">네이버</td><td class="num-r" style="color:#787774">0.196억</td><td class="num-r">0.165억</td><td class="num-r" style="color:#b91c1c">-16%</td><td><span class="badge b-amber">조정</span></td></tr>
+            <tr><td style="font-weight:600">쿠팡</td><td class="num-r" style="color:#787774">0.004억</td><td class="num-r">0.000억</td><td class="num-r" style="color:#787774">—</td><td><span class="badge b-gray">미운영</span></td></tr>
+            <tr><td style="font-weight:600">B2C</td><td class="num-r" style="color:#787774">0.037억</td><td class="num-r">0.044억</td><td class="num-r" style="color:#0f766e">+19%</td><td><span class="badge b-green">확대</span></td></tr>
+            <tr><td style="font-weight:600">B2B</td><td class="num-r" style="color:#787774">0.000억</td><td class="num-r">0.000억</td><td class="num-r" style="color:#787774">—</td><td><span class="badge b-gray">미운영</span></td></tr>
+            <tr class="sum-row"><td>합계</td><td class="num-r">0.247억</td><td class="num-r">0.223억</td><td class="num-r" style="color:#b91c1c">-10%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="init-list">
+        <div class="init-row caution">
+          <div class="init-content">
+            <div class="init-title">📦 침구류 악성재고 소진 — 원가율 단계적 개선 (3월 42%→4월 81%→5월 57%→6월 개선)</div>
+            <div class="init-desc">침구류 악성재고 소진 과정에서 원가율 급등(3월 42% → 4월 81% → 5월 57%). 재고 소진이 진행되며 점진적 개선 추세. 6월 바디럽 네이버 브랜드스토어 대형 행사 연계로 추가 소진 진행 예정. 7월부터 판매가격 원복으로 3월 수준(42%) 원가율 회복 목표.</div>
+          </div>
+          <span class="init-amount" style="color:#92400e">원가율↓</span>
+        </div>
+        <div class="init-row highlight">
+          <div class="init-content">
+            <div class="init-title">🛍️ 6월 바디럽 네이버 브랜드스토어 대형 행사 연계</div>
+            <div class="init-desc">바디럽 네이버 브랜드스토어 대형 행사와 연계하여 공백 침구류 추가 소진 진행. 재고 소진 가속화로 7월 원가율 정상화 앞당기는 전략적 판단. 행사 일정 및 물량 사전 조율 필요.</div>
+          </div>
+          <span class="init-amount">재고↓</span>
+        </div>
+        <div class="init-row new">
+          <div class="init-content">
+            <div class="init-title">📈 7월 이후 원가율 정상화 — 판매가 원복</div>
+            <div class="init-desc">7월부터 침구류 판매가격 원복 계획. 3월 수준(원가율 42%) 회복 목표. 네이버 비중(5월 0.196억)이 압도적인 채널 구조로 네이버 오가닉 전환 효율 유지가 핵심.</div>
+          </div>
+          <span class="init-amount">7월↑</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 공통 채널 이니셔티브 -->
+  <div class="section">
+    <div class="sec-hd">📄 공통 채널 이니셔티브</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%">채널/이니셔티브</th>
+            <th style="width:14%">대상 브랜드</th>
+            <th style="width:12%">일정</th>
+            <th style="width:28%">세부 내용</th>
+            <th style="width:12%" class="num-r">기대 매출</th>
+            <th style="width:12%">상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600">폐쇄몰 재운영</td>
+            <td>퓨어썸, 모도리</td>
+            <td>6월~</td>
+            <td style="color:#787774">현대카드·삼성카드·삼성블루베리 3개사</td>
+            <td class="num-r">0.2억×2</td>
+            <td><span class="badge b-green">확정</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">국군복지단 WA몰</td>
+            <td>퓨어썸, 모도리</td>
+            <td>6월~</td>
+            <td style="color:#787774">입점 완료. 6월 정식 판매 개시</td>
+            <td class="num-r">0.2억×2</td>
+            <td><span class="badge b-green">확정</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">인스타 공동구매</td>
+            <td>퓨어썸</td>
+            <td>6/22~8/8</td>
+            <td style="color:#787774">칫솔살균기 / 11개 일정 픽스</td>
+            <td class="num-r">0.1억×11</td>
+            <td><span class="badge b-blue">진행 예정</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">로프트아일랜드 협업</td>
+            <td>모도리</td>
+            <td>6/10~6/16</td>
+            <td style="color:#787774">자사 랜딩 공동구매 / 65개 채널</td>
+            <td class="num-r">TBD</td>
+            <td><span class="badge b-blue">진행 예정</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">징동닷컴 수출</td>
+            <td>퓨어썸</td>
+            <td>6월</td>
+            <td style="color:#787774">중국 온라인 플랫폼 수출 발주</td>
+            <td class="num-r">1.27억</td>
+            <td><span class="badge b-green">확정</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600">중국 B2B 발주</td>
+            <td>퓨어썸</td>
+            <td>6월</td>
+            <td style="color:#787774">중국 B2B 업체 발주</td>
+            <td class="num-r">0.72억</td>
+            <td><span class="badge b-green">확정</span></td>
+          </tr>
+          <tr class="sum-row">
+            <td>신규 채널 합계</td>
+            <td colspan="3">—</td>
+            <td class="num-r">4.2억+</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6월 Action Item -->
+  <div class="section">
+    <div class="sec-hd">📄 6월 핵심 Action Item</div>
+    <div style="padding: 0 0.25rem;">
+      <div class="action-row">
+        <div class="action-num">1</div>
+        <div>
+          <div class="action-title">퓨어썸 — 수출 채널 납기·물류 일정 최종 확인</div>
+          <div class="action-meta">담당: 퓨어썸 PL · 기한: 6/7 · <span class="badge b-green" style="font-size:10px">확정 채널</span></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">2</div>
+        <div>
+          <div class="action-title">퓨어썸 — 인스타 공동구매 재고 배분 및 인플루언서 일정 관리 (6/22~)</div>
+          <div class="action-meta">담당: 퓨어썸 PL · 기한: 6/20 · <span class="badge b-blue" style="font-size:10px">진행 예정</span></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">3</div>
+        <div>
+          <div class="action-title">모도리 — 로프트아일랜드 공동구매 재고 확보 및 랜딩 최적화 (6/10~6/16)</div>
+          <div class="action-meta">담당: 모도리 PL · 기한: 6/9 · <span class="badge b-blue" style="font-size:10px">진행 예정</span></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">4</div>
+        <div>
+          <div class="action-title">퓨어썸·모도리 — 폐쇄몰(3개사) 상품 등록 및 히어로 구성 검증과 노출 우선순위 협의</div>
+          <div class="action-meta">담당: 각 브랜드 PL · 기한: 6/7 · <span class="badge b-green" style="font-size:10px">확정 채널</span></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">5</div>
+        <div>
+          <div class="action-title">퓨어썸·모도리 — WA몰 일반 판매 전환 매출 검증 및 우선순위 협의</div>
+          <div class="action-meta">담당: 각 브랜드 PL · 기한: 6/7 · <span class="badge b-green" style="font-size:10px">입점 완료</span></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">6</div>
+        <div>
+          <div class="action-title">그래니룸·펌퀸 등 종료 예정 브랜드 재고 소진 계획 수립 (그래니룸 원가 1.36억 / 펌퀸 원가 0.57억)</div>
+          <div class="action-meta">담당: 운영팀 · 기한: 6/15 · <span class="badge b-gray" style="font-size:10px">종료 예정</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div style="display:flex;justify-content:space-between;font-size:12px;color:#b0aea9;">
+    <span>커머스 CIC 전략기획팀 · 기밀문서</span>
+    <span>작성 기준: 2025년 5월 실적 + 6월 확정 계획</span>
+  </div>
+
+</div>
+</body>
+</html>
