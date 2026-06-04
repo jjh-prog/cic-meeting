@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전월동기 비교 분석 — 5월 vs 6월 (1~3일)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif; background: #f7f6f3; color: #1a1a1a; padding: 2rem 1rem; }
+  .page { max-width: 960px; margin: 0 auto; background: white; border-radius: 12px; padding: 2.5rem 2.5rem 3rem; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+
+  .notion-header { padding-bottom: 1.25rem; border-bottom: 1px solid #ebebea; margin-bottom: 1.75rem; }
+  .notion-title { font-size: 26px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.3px; }
+  .notion-meta { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; margin-top: 0.85rem; }
+  .meta-item { font-size: 12px; color: #787774; display: flex; align-items: center; gap: 5px; }
+  .meta-val { font-weight: 600; color: #37352f; background: #f1f0ef; padding: 2px 8px; border-radius: 4px; }
+
+  .section { margin-bottom: 2rem; }
+  .sec-hd { font-size: 16px; font-weight: 700; color: #1a1a1a; padding-bottom: 0.6rem; border-bottom: 1px solid #ebebea; margin-bottom: 1rem; }
+
+  /* KPI 요약 */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1rem; }
+  .kpi { background: #f7f6f3; border-radius: 8px; padding: 0.85rem 1rem; }
+  .kpi-brand { font-size: 11px; font-weight: 700; color: #787774; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .kpi-label { font-size: 11px; color: #787774; margin-bottom: 3px; }
+  .kpi-value { font-size: 18px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.3px; }
+  .kpi-delta { font-size: 12px; margin-top: 3px; font-weight: 600; }
+  .up { color: #0f766e; } .dn { color: #b91c1c; } .nt { color: #787774; }
+
+  /* 비교 테이블 */
+  .tbl-wrap { border: 1px solid #ebebea; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f7f6f3; padding: 8px 10px; font-weight: 600; color: #787774; text-align: center; font-size: 11px; border-bottom: 1px solid #ebebea; }
+  th.left { text-align: left; }
+  td { padding: 8px 10px; color: #1a1a1a; border-bottom: 1px solid #ebebea; vertical-align: middle; font-size: 13px; text-align: right; }
+  td.left { text-align: left; }
+  td.label { text-align: left; font-weight: 600; color: #1a1a1a; background: #fafaf9; }
+  tr:last-child td { border-bottom: none; }
+  .sum-row td { background: #f7f6f3; font-weight: 700; border-top: 1px solid #e0deda; }
+  .td-up { color: #0f766e; font-weight: 700; }
+  .td-dn { color: #b91c1c; font-weight: 700; }
+  .td-nt { color: #787774; }
+  .td-est { color: #92400e; font-style: italic; }
+
+  /* Badge */
+  .badge { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 7px; border-radius: 10px; white-space: nowrap; font-weight: 600; }
+  .b-green  { background: #dcfce7; color: #15803d; }
+  .b-red    { background: #fee2e2; color: #b91c1c; }
+  .b-amber  { background: #fef3c7; color: #92400e; }
+  .b-gray   { background: #f1f0ef; color: #5f5e5a; }
+  .b-blue   { background: #dbeafe; color: #1d4ed8; }
+
+  /* Callout */
+  .callout { border-radius: 6px; padding: 0.75rem 1rem; font-size: 13px; line-height: 1.65; margin-bottom: 0.75rem; display: flex; gap: 8px; align-items: flex-start; }
+  .c-warn   { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
+  .c-info   { background: #dbeafe; color: #1d4ed8; border-left: 3px solid #3b82f6; }
+  .c-success{ background: #dcfce7; color: #15803d; border-left: 3px solid #22c55e; }
+  .c-gray   { background: #f7f6f3; color: #5f5e5a; border-left: 3px solid #b0aea9; }
+  .c-danger { background: #fee2e2; color: #b91c1c; border-left: 3px solid #ef4444; }
+
+  .brand-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+  /* 일별 바 차트 */
+  .day-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1rem; }
+  .day-chart { }
+  .day-title { font-size: 12px; font-weight: 700; color: #787774; margin-bottom: 8px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .bar-label { width: 60px; font-size: 11px; color: #787774; flex-shrink: 0; }
+  .bar-bg { flex: 1; height: 14px; background: #f1f0ef; border-radius: 3px; overflow: hidden; position: relative; }
+  .bar-fill-wrap { display: flex; height: 100%; }
+  .bar-a { height: 100%; border-radius: 2px 0 0 2px; }
+  .bar-b { height: 100%; border-radius: 0 2px 2px 0; opacity: 0.5; }
+  .bar-val { width: 55px; font-size: 11px; font-weight: 700; color: #1a1a1a; flex-shrink: 0; text-align: right; }
+
+  .insight-list { display: flex; flex-direction: column; gap: 8px; }
+  .insight-row { display: flex; gap: 10px; padding: 10px 12px; border-radius: 6px; border-left: 3px solid #e0deda; background: #fafaf9; font-size: 13px; line-height: 1.6; }
+  .insight-row.pos { border-left-color: #22c55e; background: #f0fdf9; }
+  .insight-row.neg { border-left-color: #ef4444; background: #fff5f5; }
+  .insight-row.warn { border-left-color: #f59e0b; background: #fffbeb; }
+  .insight-row.info { border-left-color: #3b82f6; background: #eff6ff; }
+  .i-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .i-text { flex: 1; color: #1a1a1a; }
+  .i-brand { font-weight: 700; }
+
+  .divider { height: 1px; background: #ebebea; margin: 1.75rem 0; }
+  .note { font-size: 11px; color: #b0aea9; margin-top: 6px; }
+
+  .header-group { background: #f0f7ff !important; color: #1d4ed8 !important; }
+  .header-group2 { background: #fef3c7 !important; color: #92400e !important; }
+
+  @media print { body { background: white; padding: 0; } .page { box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="notion-header">
+    <div class="notion-title">📊 전월동기 비교 분석 — 5월 vs 6월 (1~3일)</div>
+    <div class="notion-meta">
+      <span class="meta-item">📅 <span class="meta-val">비교 기간: 5월 1~3일 vs 6월 1~3일</span></span>
+      <span class="meta-item">🏷️ <span class="meta-val">메인 브랜드 4개</span></span>
+      <span class="meta-item">⚠️ <span class="meta-val">6월 2~3일 광고비·공헌이익은 예상치 (쿠팡SA 제외)</span></span>
+    </div>
+  </div>
+
+  <!-- 전사 요약 -->
+  <div class="section">
+    <div class="sec-hd">📄 전사 합산 요약 (4개 브랜드)</div>
+    <div class="callout c-gray">ℹ️ 6월 2~3일 광고비는 쿠팡SA 광고비를 제외한 예상 수치이며, 공헌이익도 예상치입니다. 단, 닥터원더는 쿠팡만 광고를 집행하므로 정확한 수치입니다.</div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="left" style="width:14%">구분</th>
+            <th class="header-group" colspan="4">📘 5월 (전월)</th>
+            <th class="header-group2" colspan="4">📙 6월 (당월)</th>
+            <th style="width:10%">증감</th>
+            <th style="width:8%">상태</th>
+          </tr>
+          <tr>
+            <th class="left">항목</th>
+            <th>1일</th><th>2일</th><th>3일</th><th>합계</th>
+            <th>1일</th><th>2일</th><th>3일</th><th>합계</th>
+            <th></th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 매출 -->
+          <tr>
+            <td class="label">매출</td>
+            <td>8,542</td><td>6,206</td><td>7,208</td><td style="font-weight:700">21,947</td>
+            <td>10,532</td><td>7,402</td><td>6,705</td><td style="font-weight:700">24,640</td>
+            <td class="td-up">+2,692</td>
+            <td><span class="badge b-green">+12.3%</span></td>
+          </tr>
+          <!-- 원가 -->
+          <tr>
+            <td class="label">원가</td>
+            <td>3,948</td><td>2,923</td><td>3,146</td><td style="font-weight:700">10,016</td>
+            <td>4,328</td><td>3,016</td><td>2,647</td><td style="font-weight:700">9,991</td>
+            <td class="td-up">△25</td>
+            <td><span class="badge b-green">-0.3%</span></td>
+          </tr>
+          <!-- 광고비 -->
+          <tr>
+            <td class="label">광고비</td>
+            <td>1,146</td><td>1,145</td><td>1,317</td><td style="font-weight:700">3,608</td>
+            <td>1,173</td><td class="td-est">946*</td><td class="td-est">867*</td><td style="font-weight:700" class="td-est">2,986*</td>
+            <td class="td-up">△622</td>
+            <td><span class="badge b-green">-17.2%*</span></td>
+          </tr>
+          <!-- 공헌이익 -->
+          <tr class="sum-row">
+            <td class="label">공헌이익</td>
+            <td>2,903</td><td>1,990</td><td>2,308</td><td style="font-weight:700">7,201</td>
+            <td>4,048</td><td class="td-est">2,233*</td><td class="td-est">1,790*</td><td style="font-weight:700" class="td-est">8,071*</td>
+            <td class="td-up">+870</td>
+            <td><span class="badge b-green">+12.1%*</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">※ 단위: 만원 (천원 절사) | * 6월 2~3일 예상치 포함 수치</p>
+
+    <!-- KPI 카드 -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:1rem">
+      <div class="kpi">
+        <div class="kpi-label">전사 매출 증감</div>
+        <div class="kpi-value">+12.3%</div>
+        <div class="kpi-delta up">▲ +2,692만원</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">원가율 (6월)</div>
+        <div class="kpi-value">40.6%</div>
+        <div class="kpi-delta up">▼ 5월(45.6%) -5.0%p</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">광고비율 (6월)*</div>
+        <div class="kpi-value">12.1%*</div>
+        <div class="kpi-delta up">▼ 5월(16.4%) -4.3%p*</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">공헌이익률 (6월)*</div>
+        <div class="kpi-value">32.8%*</div>
+        <div class="kpi-delta up">▲ 5월(32.8%) 동일 수준</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 브랜드별 상세 비교 -->
+  <div class="section">
+    <div class="sec-hd">📄 브랜드별 상세 비교</div>
+
+    <!-- 퓨어썸 -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="brand-dot" style="background:#3b82f6;width:10px;height:10px"></span>퓨어썸
+        <span class="badge b-green">매출 +5.7%</span>
+        <span class="badge b-green">공헌이익 +27.8%*</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left" style="width:13%">항목</th>
+              <th class="header-group">5/1</th><th class="header-group">5/2</th><th class="header-group">5/3</th><th class="header-group">5월 합</th>
+              <th class="header-group2">6/1</th><th class="header-group2">6/2</th><th class="header-group2">6/3</th><th class="header-group2">6월 합</th>
+              <th>증감액</th><th>증감률</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">매출</td>
+              <td>6,650</td><td>4,961</td><td>5,795</td><td style="font-weight:700">17,406</td>
+              <td>7,756</td><td>5,516</td><td>5,121</td><td style="font-weight:700">18,393</td>
+              <td class="td-up">+987</td><td class="td-up">+5.7%</td>
+            </tr>
+            <tr>
+              <td class="label">원가</td>
+              <td>2,844</td><td>2,161</td><td>2,407</td><td style="font-weight:700">7,412</td>
+              <td>3,116</td><td>2,164</td><td>1,981</td><td style="font-weight:700">7,261</td>
+              <td class="td-up">△151</td><td class="td-up">-2.0%</td>
+            </tr>
+            <tr>
+              <td class="label">원가율</td>
+              <td class="td-nt">42.8%</td><td class="td-nt">43.6%</td><td class="td-nt">41.5%</td><td class="td-nt">42.6%</td>
+              <td class="td-nt">40.2%</td><td class="td-nt">39.2%</td><td class="td-nt">38.7%</td><td class="td-nt">39.5%</td>
+              <td class="td-up">-3.1%p</td><td>—</td>
+            </tr>
+            <tr>
+              <td class="label">광고비</td>
+              <td>744</td><td>698</td><td>774</td><td style="font-weight:700">2,215</td>
+              <td>890</td><td class="td-est">630*</td><td class="td-est">633*</td><td style="font-weight:700" class="td-est">2,153*</td>
+              <td class="td-up">△62</td><td class="td-up td-est">-2.8%*</td>
+            </tr>
+            <tr>
+              <td class="label">광고비율</td>
+              <td class="td-nt">11.2%</td><td class="td-nt">14.1%</td><td class="td-nt">13.4%</td><td class="td-nt">12.7%</td>
+              <td class="td-nt">11.5%</td><td class="td-est">11.4%*</td><td class="td-est">12.4%*</td><td class="td-est">11.7%*</td>
+              <td class="td-up">-1.0%p</td><td>—</td>
+            </tr>
+            <tr class="sum-row">
+              <td class="label">공헌이익</td>
+              <td>1,953</td><td>1,299</td><td>1,651</td><td style="font-weight:700">4,903</td>
+              <td>2,672</td><td class="td-est">1,862*</td><td class="td-est">1,733*</td><td style="font-weight:700" class="td-est">6,267*</td>
+              <td class="td-up">+1,364</td><td class="td-up td-est">+27.8%*</td>
+            </tr>
+            <tr>
+              <td class="label">이익률</td>
+              <td class="td-nt">29.4%</td><td class="td-nt">26.2%</td><td class="td-nt">28.5%</td><td class="td-nt">28.2%</td>
+              <td class="td-up">34.5%</td><td class="td-est">33.8%*</td><td class="td-est">33.8%*</td><td class="td-up td-est">34.1%*</td>
+              <td class="td-up">+5.9%p*</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-success" style="margin-top:6px">✅ 매출 +5.7% 성장, 원가율 42.6%→39.5%로 개선. 공헌이익률 28.2%→34.1%(*예상)로 큰 폭 상승. 6/1일 매출 7,756만원으로 일별 최고치 기록.</div>
+    </div>
+
+    <!-- 바디럽 -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="brand-dot" style="background:#f87171;width:10px;height:10px"></span>바디럽
+        <span class="badge b-green">매출 +72.7%</span>
+        <span class="badge b-green">공헌이익 +155.5%*</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left" style="width:13%">항목</th>
+              <th class="header-group">5/1</th><th class="header-group">5/2</th><th class="header-group">5/3</th><th class="header-group">5월 합</th>
+              <th class="header-group2">6/1</th><th class="header-group2">6/2</th><th class="header-group2">6/3</th><th class="header-group2">6월 합</th>
+              <th>증감액</th><th>증감률</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">매출</td>
+              <td>209</td><td>176</td><td>182</td><td style="font-weight:700">568</td>
+              <td>534</td><td>168</td><td>278</td><td style="font-weight:700">980</td>
+              <td class="td-up">+412</td><td class="td-up">+72.7%</td>
+            </tr>
+            <tr>
+              <td class="label">원가</td>
+              <td>111</td><td>90</td><td>91</td><td style="font-weight:700">292</td>
+              <td>265</td><td>80</td><td>121</td><td style="font-weight:700">466</td>
+              <td class="td-dn">+174</td><td class="td-dn">+59.7%</td>
+            </tr>
+            <tr>
+              <td class="label">원가율</td>
+              <td class="td-nt">53.1%</td><td class="td-nt">50.9%</td><td class="td-nt">50.3%</td><td class="td-nt">51.4%</td>
+              <td class="td-nt">49.6%</td><td class="td-nt">47.7%</td><td class="td-nt">43.4%</td><td class="td-nt">47.5%</td>
+              <td class="td-up">-3.9%p</td><td>—</td>
+            </tr>
+            <tr>
+              <td class="label">광고비</td>
+              <td>19</td><td>17</td><td>21</td><td style="font-weight:700">57</td>
+              <td>22</td><td class="td-est">22*</td><td class="td-est">22*</td><td style="font-weight:700" class="td-est">67*</td>
+              <td class="td-dn">+10</td><td class="td-dn td-est">+17.5%*</td>
+            </tr>
+            <tr class="sum-row">
+              <td class="label">공헌이익</td>
+              <td>48</td><td>43</td><td>40</td><td style="font-weight:700">130</td>
+              <td>195</td><td class="td-est">39*</td><td class="td-est">99*</td><td style="font-weight:700" class="td-est">333*</td>
+              <td class="td-up">+203</td><td class="td-up td-est">+155.5%*</td>
+            </tr>
+            <tr>
+              <td class="label">이익률</td>
+              <td class="td-nt">22.7%</td><td class="td-nt">24.1%</td><td class="td-nt">22.1%</td><td class="td-nt">23.0%</td>
+              <td class="td-up">36.4%</td><td class="td-est">23.2%*</td><td class="td-est">35.7%*</td><td class="td-up td-est">34.0%*</td>
+              <td class="td-up">+11.0%p*</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-success" style="margin-top:6px">✅ 6/1일 매출 534만원으로 전월동기 대비 +155% 급증. 5월 1~3일 평균 189만원 → 6월 1일 단독 534만원. 일별 편차가 크나 3일 합산 +72.7% 성장. 원가율도 51.4%→47.5%로 개선.</div>
+    </div>
+
+    <!-- 모도리 -->
+    <div style="margin-bottom:1.5rem">
+      <div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="brand-dot" style="background:#f59e0b;width:10px;height:10px"></span>모도리
+        <span class="badge b-green">매출 +30.2%</span>
+        <span class="badge b-green">공헌이익 +134.1%*</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left" style="width:13%">항목</th>
+              <th class="header-group">5/1</th><th class="header-group">5/2</th><th class="header-group">5/3</th><th class="header-group">5월 합</th>
+              <th class="header-group2">6/1</th><th class="header-group2">6/2</th><th class="header-group2">6/3</th><th class="header-group2">6월 합</th>
+              <th>증감액</th><th>증감률</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">매출</td>
+              <td>1,478</td><td>890</td><td>1,232</td><td style="font-weight:700">3,599</td>
+              <td>1,990</td><td>1,564</td><td>1,133</td><td style="font-weight:700">4,687</td>
+              <td class="td-up">+1,088</td><td class="td-up">+30.2%</td>
+            </tr>
+            <tr>
+              <td class="label">원가</td>
+              <td>753</td><td>436</td><td>578</td><td style="font-weight:700">1,767</td>
+              <td>850</td><td>720</td><td>487</td><td style="font-weight:700">2,056</td>
+              <td class="td-dn">+289</td><td class="td-dn">+16.4%</td>
+            </tr>
+            <tr>
+              <td class="label">원가율</td>
+              <td class="td-nt">51.0%</td><td class="td-nt">49.0%</td><td class="td-nt">46.9%</td><td class="td-nt">49.1%</td>
+              <td class="td-nt">42.7%</td><td class="td-nt">46.0%</td><td class="td-nt">43.0%</td><td class="td-nt">43.9%</td>
+              <td class="td-up">-5.2%p</td><td>—</td>
+            </tr>
+            <tr>
+              <td class="label">광고비</td>
+              <td>184</td><td>179</td><td>186</td><td style="font-weight:700">548</td>
+              <td>212</td><td class="td-est">249*</td><td class="td-est">183*</td><td style="font-weight:700" class="td-est">644*</td>
+              <td class="td-dn">+96</td><td class="td-dn td-est">+17.5%*</td>
+            </tr>
+            <tr>
+              <td class="label">광고비율</td>
+              <td class="td-nt">12.5%</td><td class="td-nt">20.1%</td><td class="td-nt">15.1%</td><td class="td-nt">15.2%</td>
+              <td class="td-nt">10.6%</td><td class="td-est">15.9%*</td><td class="td-est">16.2%*</td><td class="td-est">13.7%*</td>
+              <td class="td-up">-1.5%p</td><td>—</td>
+            </tr>
+            <tr class="sum-row">
+              <td class="label">공헌이익</td>
+              <td>148</td><td>113</td><td>294</td><td style="font-weight:700">555</td>
+              <td>628</td><td class="td-est">375*</td><td class="td-est">297*</td><td style="font-weight:700" class="td-est">1,299*</td>
+              <td class="td-up">+744</td><td class="td-up td-est">+134.1%*</td>
+            </tr>
+            <tr>
+              <td class="label">이익률</td>
+              <td class="td-nt">10.0%</td><td class="td-nt">12.7%</td><td class="td-nt">23.9%</td><td class="td-nt">15.4%</td>
+              <td class="td-up">31.6%</td><td class="td-est">24.0%*</td><td class="td-est">26.2%*</td><td class="td-up td-est">27.7%*</td>
+              <td class="td-up">+12.3%p*</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-success" style="margin-top:6px">✅ 매출 +30.2%, 공헌이익 +134.1%(*예상). 원가율 49.1%→43.9%로 크게 개선. 5월 이익률 15.4% → 6월 27.7%(*예상)로 회복세 뚜렷. 2개월 연속 미달 상황에서 6월 초 반등 신호 긍정적.</div>
+    </div>
+
+    <!-- 닥터원더 -->
+    <div style="margin-bottom:1rem">
+      <div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span class="brand-dot" style="background:#7c3aed;width:10px;height:10px"></span>닥터원더
+        <span class="badge b-red">매출 -6.7%</span>
+        <span class="badge b-green">공헌이익 +81.9% ✓정확</span>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="left" style="width:13%">항목</th>
+              <th class="header-group">5/1</th><th class="header-group">5/2</th><th class="header-group">5/3</th><th class="header-group">5월 합</th>
+              <th class="header-group2">6/1</th><th class="header-group2">6/2</th><th class="header-group2">6/3</th><th class="header-group2">6월 합</th>
+              <th>증감액</th><th>증감률</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">매출</td>
+              <td>202</td><td>220</td><td>200</td><td style="font-weight:700">622</td>
+              <td>253</td><td>155</td><td>173</td><td style="font-weight:700">581</td>
+              <td class="td-dn">△41</td><td class="td-dn">-6.7%</td>
+            </tr>
+            <tr>
+              <td class="label">원가</td>
+              <td>69</td><td>75</td><td>69</td><td style="font-weight:700">213</td>
+              <td>98</td><td>53</td><td>60</td><td style="font-weight:700">210</td>
+              <td class="td-up">△3</td><td class="td-up">-1.3%</td>
+            </tr>
+            <tr>
+              <td class="label">원가율</td>
+              <td class="td-nt">34.1%</td><td class="td-nt">33.9%</td><td class="td-nt">34.5%</td><td class="td-nt">34.2%</td>
+              <td class="td-nt">38.6%</td><td class="td-nt">34.1%</td><td class="td-nt">34.6%</td><td class="td-nt">36.2%</td>
+              <td class="td-dn">+2.0%p</td><td>—</td>
+            </tr>
+            <tr>
+              <td class="label">광고비</td>
+              <td>56</td><td>59</td><td>68</td><td style="font-weight:700">183</td>
+              <td>49</td><td>46</td><td>51</td><td style="font-weight:700">146</td>
+              <td class="td-up">△37</td><td class="td-up">-20.3% ✓</td>
+            </tr>
+            <tr>
+              <td class="label">광고비율</td>
+              <td class="td-nt">27.8%</td><td class="td-nt">26.6%</td><td class="td-nt">34.1%</td><td class="td-nt">29.4%</td>
+              <td class="td-up">19.4%</td><td class="td-up">29.8%</td><td class="td-up">29.5%</td><td class="td-up">25.1%</td>
+              <td class="td-up">-4.3%p ✓</td><td>—</td>
+            </tr>
+            <tr class="sum-row">
+              <td class="label">공헌이익</td>
+              <td>42</td><td>41</td><td>21</td><td style="font-weight:700">104</td>
+              <td>91</td><td>47</td><td>50</td><td style="font-weight:700">189</td>
+              <td class="td-up">+85</td><td class="td-up">+81.9% ✓</td>
+            </tr>
+            <tr>
+              <td class="label">이익률</td>
+              <td class="td-nt">20.6%</td><td class="td-nt">18.8%</td><td class="td-nt">10.4%</td><td class="td-nt">16.7%</td>
+              <td class="td-up">36.0%</td><td class="td-up">30.6%</td><td class="td-up">29.1%</td><td class="td-up">32.5%</td>
+              <td class="td-up">+15.8%p ✓</td><td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout c-info" style="margin-top:6px">ℹ️ 매출은 -6.7% 소폭 감소했으나, 광고비 20.3% 절감(쿠팡 SA 집행 최적화)으로 공헌이익 +81.9% 급증. 이익률 16.7%→32.5%로 거의 2배 개선. 광고 효율화의 성공적 사례로 타 브랜드 참고 필요.</div>
+    </div>
+  </div>
+
+  <!-- 핵심 인사이트 -->
+  <div class="section">
+    <div class="sec-hd">📄 핵심 인사이트 및 시사점</div>
+    <div class="insight-list">
+      <div class="insight-row pos">
+        <div class="i-icon">✅</div>
+        <div class="i-text"><span class="i-brand">전사</span> 매출 +12.3% 성장하며 6월 초 긍정적 출발. 4개 브랜드 모두 원가율 개선 (전사 45.6%→40.6%, -5.0%p). 공헌이익도 전사 +12.1%(*예상) 증가.</div>
+      </div>
+      <div class="insight-row pos">
+        <div class="i-icon">🏆</div>
+        <div class="i-text"><span class="i-brand">닥터원더</span> 매출은 소폭 감소(-6.7%)했으나 광고비 20.3% 절감으로 공헌이익 +81.9%(정확한 수치). 이익률 16.7%→32.5%로 개선. 쿠팡SA 광고 최적화 효과가 수익성 개선으로 직결. <strong>타 브랜드 광고 효율화 시 참고 모델.</strong></div>
+      </div>
+      <div class="insight-row pos">
+        <div class="i-icon">📈</div>
+        <div class="i-text"><span class="i-brand">모도리</span> 5월 이익률 15.4%에서 6월 1~3일 27.7%(*예상)로 회복세. 2개월 연속 목표 미달 상황에서 6월 초 반등 신호. 원가율 49.1%→43.9% 개선이 주요 요인. 6월 목표(4.58억) 달성 가능성 긍정적으로 전환.</div>
+      </div>
+      <div class="insight-row pos">
+        <div class="i-icon">🚀</div>
+        <div class="i-text"><span class="i-brand">바디럽</span> 6/1일 534만원으로 전월 일평균(189만원) 대비 +182% 급증. 3일 합산 기준 +72.7% 성장. 5월 부진에서 빠른 회복세 확인. 다만 2~3일 편차가 크므로 지속성 모니터링 필요.</div>
+      </div>
+      <div class="insight-row warn">
+        <div class="i-icon">⚠️</div>
+        <div class="i-text"><span class="i-brand">광고비 예상치 주의</span> 6월 2~3일 쿠팡SA 제외 광고비 예상치로 집계됨. 실제 쿠팡SA 광고비 확정 시 전사 광고비율 및 공헌이익 변동 예상. 특히 퓨어썸·바디럽·모도리 3개 브랜드는 실제 확정 후 재검토 필요.</div>
+      </div>
+      <div class="insight-row info">
+        <div class="i-icon">📊</div>
+        <div class="i-text"><span class="i-brand">퓨어썸</span> 이익률 28.2%→34.1%(*예상)로 큰 폭 개선. 원가율 3.1%p 하락이 핵심. 6/1일 최대 매출 7,756만원 기록. 쿠팡 DOC 발주 확대와 정시즌 진입 효과가 본격화될 경우 목표(20.4억) 달성 가시권.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div style="display:flex;justify-content:space-between;font-size:12px;color:#b0aea9;">
+    <span>커머스 CIC · 기밀문서</span>
+    <span>비교 기준: 5월 1~3일 vs 6월 1~3일 | * 6월 2~3일 광고비·공헌이익 예상치 포함 (닥터원더 제외 정확)</span>
+  </div>
+
+</div>
+</body>
+</html>
